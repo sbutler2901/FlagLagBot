@@ -52,7 +52,7 @@ function handleRequest(serverRequest, response){
 
     if (serverRequest.method == 'POST') {
         
-        console.log("POST");
+        console.log("Server.js : POST received");
         var body = '';
         serverRequest.on('data', function (data) {
             body += data;
@@ -77,7 +77,7 @@ function handleRequest(serverRequest, response){
     }
     else
     {
-        console.log("GET");
+        console.log("Server.js : GET received");
         //var html = '<html><body><form method="post" action="http://cutegirls.servebeer.com:40676">Name: <input type="text" name="name" /><input type="submit" value="Submit" /></form></body>';
         //var html = fs.readFileSync('index.html');
         var html = '<html><body><h1>This server does not accept GET requests besides this.</h1></body>';
@@ -89,8 +89,6 @@ function handleRequest(serverRequest, response){
 // This function handles when a POST is made to the server
 function handlePost(postJSON) {
     var post = JSON.parse(postJSON);
-
-    //console.log(post);
 
     // NOTE
     // - The launchdarkly webhook policy (set on the site for the specific webhook) should eliminate the need for this test,
@@ -108,7 +106,7 @@ function handlePost(postJSON) {
                 flagJSON = {"key":flagKey, "createDate":flagCreationDate, "isOn":true, "activationDate":flagUpdateDate};
                 updateFlagState(flagJSON);
 
-                console.log("Flag turned on");
+                console.log("Server.js : Flag turned on");
 
                 createFlagTimeout(flagKey);
                 break;
@@ -119,7 +117,7 @@ function handlePost(postJSON) {
                 flagJSON = {"key":flagKey, "createDate":flagCreationDate, "isOn":false, "activationDate":flagUpdateDate};
                 updateFlagState(flagJSON);
 
-                console.log("Flag turned off");
+                console.log("Server.js : Flag turned off");
 
                 deleteFlagTimeout(flagKey);
                 break;
@@ -130,7 +128,7 @@ function handlePost(postJSON) {
                 flagJSON = {"key":flagKey, "createDate":flagCreationDate, "isOn":false, "activationDate":flagUpdateDate};
                 updateFlagState(flagJSON);
 
-                console.log("Flag created");
+                console.log("Server.js : Flag created");
 
                 break;
 
@@ -141,16 +139,16 @@ function handlePost(postJSON) {
                     slackbot.notifyDeletedFlag(flagKey);
                 });
 
-                console.log("Flag deleted");
+                console.log("Server.js : Flag deleted");
 
                 deleteFlagTimeout(flagKey);
                 break;
 
             default:
-                console.log("The flag was modified, but its activation state was not affected");
+                console.log("Server.js : The flag was modified, but its activation state was not affected");
         }
     } else {
-        console.log("Post was not feature flag related");
+        console.log("Server.js : Post was not feature flag related");
     }
 }
 
@@ -221,10 +219,10 @@ function loadFlagStates(callback) {
         if(err) {
             fs.writeFile(flagStateFileName, '', function(err) {
                 if(err) {
-                    console.log("Error the file was not able to be created: ", err.stack);
+                    console.log("Server.js : Error the flag states file was not able to be created: ", err.stack);
                 }
             });
-            console.log("The file was created!");
+            console.log("Server.js : The flag states file was created!");
             callback("");
         } else callback(data);
     });
@@ -234,7 +232,7 @@ function loadFlagStates(callback) {
 function saveFlagStates() {
     fs.writeFile(flagStateFileName, JSON.stringify(flagStatesJSONArray), (err) => {
       if (err) throw err;
-      console.log('Flag stats saved.');
+      console.log('Server.js : Flag stats saved.');
     });
 }
 
@@ -253,17 +251,15 @@ function getAllFlags() {
       }
     };
 
-    console.log("Server.js : LDAuth = '", LDAuth, '');
-
     // Send a http request to url and specify a callback that will be called upon its return.
     request(options, function (error, response, body) 
     {
         if (error) {
-            console.log("Server.js : Get flag error: ", error);
+            console.log("Server.js : getAllflag() error: ", error);
         } else {
-            if(response.statusCode == 401) {
+            if(response.statusCode != 200) {
                 console.log("Server.js : statusMessage = ", response.statusMessage);
-                console.log("Server.js : body = ", body);
+                console.log("Server.js : there was an error with the GET getAllFlags request");
             } else {
                 var flags = JSON.parse(body);
                 for( var i = 0; i < flags.items.length; i++ )
@@ -296,15 +292,24 @@ function getFlag(flagKey, callback) {
     // Send a http request to url and specify a callback that will be called upon its return.
     request(options, function (error, response, body) 
     {
-        var flag = JSON.parse(body);
+        if (error) {
+            console.log("Server.js :  getflag() error: ", error);
+        } else {
+            if(response.statusCode != 200) {
+                    console.log("Server.js : statusMessage = ", response.statusMessage);
+                    console.log("Server.js : there was an error with the GET getFlag request");
+            } else {
+                var flag = JSON.parse(body);
 
-        //NOTE
-        // - if the ENVIRON key is changed the "production" component must be also
-        // - if the keys of this array are updated, the flag state file must be recreated as empty & updateFlagState() must be updated
-        // - activationDate defaults to the lastModified date of flag if the flag was created while bot was not running (whether flag is on or not)
-        var flagJSON = {"key":flag.key, "createDate":flag.creationDate, "isOn":flag.environments.production.on, "activationDate":flag.environments.production.lastModified};
-        
-        callback(flagJSON);
+                //NOTE
+                // - if the ENVIRON key is changed the "production" component must be also
+                // - if the keys of this array are updated, the flag state file must be recreated as empty & updateFlagState() must be updated
+                // - activationDate defaults to the lastModified date of flag if the flag was created while bot was not running (whether flag is on or not)
+                var flagJSON = {"key":flag.key, "createDate":flag.creationDate, "isOn":flag.environments.production.on, "activationDate":flag.environments.production.lastModified};
+                
+                callback(flagJSON);
+            }
+        }
     });
 }
 
@@ -327,12 +332,17 @@ function createWebhook(serverIP) {
     // Send a http request to url and specify a callback that will be called upon its return.
     request(options, function (error, response, body) 
     {
-      if (error) {
+        if (error) {
         console.log("Server.js : Webhook post error: ", error);
-      } else {
-        var obj = JSON.parse(body);
-        console.log("Server.js : Created the webhook at: ", obj.url);
-      }
+        } else {
+            if(response.statusCode != 200) {
+                    console.log("Server.js : statusMessage = ", response.statusMessage);
+                    console.log("Server.js : there was an error with the POST createWebhook request");
+            } else {
+                var obj = JSON.parse(body);
+                console.log("Server.js : Created the webhook at: ", obj.url);
+            }
+        }
     });
 }
 
@@ -348,9 +358,15 @@ function getIP(callback) {
     if (error) {
       console.log("Server.js : get IP error: ", error);
     } else {
-      var obj = JSON.parse(body);
-      console.log("IP: ", obj.ip);
-      callback(obj.ip);
+
+        if(response.statusCode != 200) {
+            console.log("Server.js : statusMessage = ", response.statusMessage);
+            console.log("Server.js : there was an error with the GET getIP request");
+        } else {
+            var obj = JSON.parse(body);
+            //console.log("Server.js : IP: ", obj.ip);
+            callback(obj.ip);
+        }
     }
   }); 
 }
@@ -361,7 +377,7 @@ function getIP(callback) {
 
 // This function is called upon a flag timeout
 function flagTimedOut(flagKey, msTimeout) {
-    console.log("Timed out " + flagKey + " " + msTimeout + "ms");
+    console.log("Server.js : Timed out " + flagKey + " " + msTimeout + "ms");
     slackbotReady.then(function(){
         slackbot.notifyTimedOutFlag(flagKey, msTimeout);
     });
@@ -378,8 +394,8 @@ function createFlagTimeout(flagKey, msTimeout) {
 
     timeoutArray.push({flagkey:newTimeout});
 
-    console.log("Timeout for " + flagKey + " created");
-    //console.log("timeout array = " + timeoutArray);
+    console.log("Server.js : Timeout for " + flagKey + " created");
+    //console.log("Server.js : timeout array = " + timeoutArray);
 }
 
 // Deletes a time out for the specified flag
@@ -387,7 +403,7 @@ function deleteFlagTimeout(flagKey) {
     timeoutArray.splice(flagKey, 1);
 
     console.log("Timeout for " + flagKey + " deleted");
-    //console.log("timeout array = " + timeoutArray);
+    //console.log("Server.js : timeout array = " + timeoutArray);
 }
 
 /*================================================
@@ -399,10 +415,10 @@ function serverInit() {
     loadFlagStates(function(data){
         if(data != "") {
             flagStatesJSONArray = JSON.parse(data);
-            console.log("Flag states file loaded.");         
+            console.log("Server.js : Flag states file loaded.");         
         } else {
             flagStatesJSONArray = new Array();
-            console.log("Flag stats file was empty.");
+            console.log("Server.js : Flag stats file was empty.");
         }
     });
 
@@ -417,7 +433,7 @@ function serverInit() {
     //Lets start our server
     server.listen(PORT, function(){
         //Callback triggered when server is successfully listening. Hurray!
-        console.log("Server listening on: http://localhost:%s", PORT);
+        console.log("Server.js : Server listening on: http://localhost:%s", PORT);
     });
 }
 

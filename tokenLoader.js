@@ -1,6 +1,6 @@
 var fs = require("fs");
 
-var configFD = fs.openSync("./config.json", 'r');
+var configFD = fs.openSync(__dirname + "/config.json", 'r');
 var configData = fs.readFileSync(configFD, 'utf8');
 
 var parsedConfig = JSON.parse(configData);

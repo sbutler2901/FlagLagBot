@@ -80,12 +80,11 @@ We used slack as the main form of communication for setting up meetings, delegat
 
 
 ### Limitations and Future work
-Keeping in mind that we only have a semester and this a three credit hour class, we were limited by the time we could spend on this project. If we had more time on this project, we could invest some to improve/ extend this project as follows:
+Keeping in mind that we only have a semester and this is a three credit hour class, we were limited by the time we could spend on this project. If we had more time on this project, we could invest some to improve/ extend this project as follows:
 
 We spent a good amount of time trying to explore the slack API for creating and using interactive buttons. We were successful in making them show up on our channel. Since we were running short on time, we could not invest any in trying to see how the click event will connect back our program’s control flow. Because we were using simple slack api from the beginning, using buttons meant we had to change other things as well. Switching to slack api would also make our code cleaner, but again time was our constraint. 
 
 Currently FlagLagBot supports users to integrate feature flag code into mainline or discard feature flag code from the repository for java script files only. Some of LaunchDarkly SDK’s include: Go | iOS | Java | JavaScript | PHP | Python | .NET | Ruby. In the future, we could extend the bot to support code base written in other languages.  
 
-
 ## Peer Evaluations [50%]
-
+All team members must individually submit a peer evaluation report.

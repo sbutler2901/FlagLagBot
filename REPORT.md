@@ -25,21 +25,29 @@ A user can request the FlagLagBot to perform an action by issuing a command.  Th
 
 * List flags: `list flags`
   * List all the flags that are visible on Launch Darkly Dashboard
+  * ![List Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/listflags.PNG "List Flags")
+
 
 * Create flags: `create flag <flag-key>`
   * Creates a new feature flag key on the LaunchDarkly Dashboard that can be used on the code base
+  * ![Create Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/createflag.PNG "Create Flags")
 
 * Delete flags: `delete flag <flag-key>`
-  * Deletes a flag on the LaunchDarkly Dashboard. Triggers an alert for the user on the slack channel if they want to discard or integrate the feature flag code 
+  * Deletes a flag on the LaunchDarkly Dashboard. Triggers an alert for the user on the slack channel if they want to discard or integrate the feature flag code
+  * ![Delete Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/deleteflag.PNG "Delete Flags")
 
 * Toggle flags – ON/OFF:  `turn on <flag-key>` or `turn off <flag-key>`
   * Turn a feature flag on or off on the dashboard. A turned on feature means that code is visible to the users and is executed. A turned off feature means the code for the feature exists but is not executed. 
+  * ![Toggle Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/toggleflag.PNG "Toggle Flags")
 
 * Integrate Feature Flag: `integrate feature <flag-key>`
   * Removes reference to the flag and merges the code of the new feature into the original code base so it is part of the project
+  * ![Integrate Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/integrate.PNG "Integrate Flags")
 
 * Discard Feature Flag: `discard flag <flag-key>`
   * Removes reference to the flag and also deletes the code related to the new feature from the original code base permanently.
+  * ![Discard Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/discard.PNG "Discard Flags")
+
 
 Additionally, there are two triggers that the bot presents to the users based on the webbooks that the server receives from LaunchDarkly.
 

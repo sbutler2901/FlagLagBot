@@ -18,7 +18,7 @@ Final Version:
 
 Feature flags can be a powerful continuous deployment tool for controlling features at run-time. There are many feature flag management systems, such as LaunchDarkly, that provide a nice web interface for toggling features. However, there is nothing to connect the management system to the code that uses the feature flags. Once feature flags are introduced in the code they can be hard to keep track of, and can cause problems if they are not removed properly when the feature is fully released. 
 
-The FlagLagBot aims to bridge the gap between Launch Darkly and the code base that uses it. Our bot lives on a slack. A user can manage feature flags present on LaunchDarkly dashboard directly from the slack channel. Some of the actions requested by the user results in changes to the code on the GitHub repository 
+The FlagLagBot aims to bridge the gap between Launch Darkly and the code base that uses it. The FlagLagBot Slackbot allows users to easily manage feature flags present on their LaunchDarkly dashboard. It also gives users optitons to integrate or discard features in their git repository.
 
 ### Primary Features and Screenshots
 A user can request the FlagLagBot to perform an action by issuing a command.  The primary features of our bot can be summarized by the list the commands and their description found below:
@@ -32,7 +32,7 @@ A user can request the FlagLagBot to perform an action by issuing a command.  Th
 * Delete flags: `delete flag <flag-key>`
   * Deletes a flag on the LaunchDarkly Dashboard. Triggers an alert for the user on the slack channel if they want to discard or integrate the feature flag code 
 
-* Toggle flags – ON/ OFF:  `turn on <flag-key>` or `turn off <flag-key>`
+* Toggle flags – ON/OFF:  `turn on <flag-key>` or `turn off <flag-key>`
   * Turn a feature flag on or off on the dashboard. A turned on feature means that code is visible to the users and is executed. A turned off feature means the code for the feature exists but is not executed. 
 
 * Integrate Feature Flag: `integrate feature <flag-key>`
@@ -43,13 +43,13 @@ A user can request the FlagLagBot to perform an action by issuing a command.  Th
 
 Additionally, there are two triggers that the bot presents to the users based on the webbooks that the server receives from LaunchDarkly.
 
-* If a feature flag is turned on for too long, it sends a notification message on the slack channel
-  * From here, the user can choose to integrate the feature into mainline code if they are interested or dismiss the alert.
+* If a feature flag is turned on for too long (seven days), it sends a notification message on the slack channel
+  * From here, the user can choose to integrate the feature into mainline code if they are interested.
 
 * If a feature flag has been deleted on LaunchDarkly, the bot sends a notification message on the slack channel
  * From here, the user can choose to integrate the feature or discard the feature in order to avoid dead feature flag code and eliminate a dangling reference.
 
-### Refelction on the Development process and Project
+### Reflection on the Development Process and Project
 
 This project was a semester long project and tied in well with the material we covered in class. Having the project broken down into phases using the different milestones definitely helped in making the development process more manageable. It would have been a challenge if we did not have these milestones as a guiding reference points. We had a chance to go through a complete cycle – starting from design phase and all the way to the deployment phase in a systematic way.
 
@@ -79,12 +79,12 @@ During the development process, we used the GitHub Issue Tracker for setting up 
 We used slack as the main form of communication for setting up meetings, delegating tasks, checking on progress and debugging and posting when issues arise.  It was easier to delegate action items for bot, service, and deploy milestones compared to the design and report milestone were documentation was significant. For the most part, there were sections of the project we could divide and tasks to delegate, however, we had to meet and collaborate when we were putting them together. Our full team meetings usually happened in the last week before a milestone is due. This meant all of our schedules two days before the milestone deadline seemed loaded with work. 
 
 
-### Limitations and Future work
+### Limitations and Future Work
 Keeping in mind that we only have a semester and this is a three credit hour class, we were limited by the time we could spend on this project. If we had more time on this project, we could invest some to improve/ extend this project as follows:
 
-We spent a good amount of time trying to explore the slack API for creating and using interactive buttons. We were successful in making them show up on our channel. Since we were running short on time, we could not invest any in trying to see how the click event will connect back our program’s control flow. Because we were using simple slack api from the beginning, using buttons meant we had to change other things as well. Switching to slack api would also make our code cleaner, but again time was our constraint. 
+We spent a good amount of time trying to explore the Slack API for creating and using interactive buttons. We were successful in making them show up on our channel. However, since we were running short on time, we could not invest any time in trying to see how the click event will connect back our program’s control flow. In the future we would like to add button options for the user whenever we send a notification, instead of leaving it up to the user to find the options.
 
-Currently FlagLagBot supports users to integrate feature flag code into mainline or discard feature flag code from the repository for java script files only. Some of LaunchDarkly SDK’s include: Go | iOS | Java | JavaScript | PHP | Python | .NET | Ruby. In the future, we could extend the bot to support code base written in other languages.  
+Currently FlagLagBot supports feature flag integration for the LaunchDarkly NodeJS SDK only. Other LaunchDarkly SDK’s include: Go | iOS | Java | JavaScript | PHP | Python | .NET | Ruby. In the future, we could extend the bot to support code bases written in other languages.  
 
 ## Peer Evaluations [50%]
 All team members must individually submit a peer evaluation report.

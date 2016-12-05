@@ -336,7 +336,7 @@ function createWebhook(serverIP) {
         if (error) {
         console.log("Server.js : Webhook post error: ", error);
         } else {
-            if(response.statusCode != 200 || response.statusCode != 201) {
+            if(response.statusCode != 200 && response.statusCode != 201) {
                     console.log("Server.js : statusMessage = ", response.statusMessage);
                     console.log("Server.js : there was an error with the POST createWebhook request");
             } else {

@@ -46,9 +46,11 @@ Additionally, there are two triggers that the bot presents to the users based on
 
 * If a feature flag is turned on for too long (seven days), it sends a notification message on the slack channel
   * From here, the user can choose to integrate the feature into mainline code if they are interested.
+  * ![Expired Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/expiredFlag.png "Discard Flags")
 
 * If a feature flag has been deleted on LaunchDarkly, the bot sends a notification message on the slack channel
  * From here, the user can choose to integrate the feature or discard the feature in order to avoid dead feature flag code and eliminate a dangling reference.
+ * ![LD Delted Flags](https://github.ncsu.edu/kebrey/FlagLagBot/blob/master/screenshots/LDDeletedFlag.png "Discard Flags")
 
 ### Reflection on the Development Process and Project
 

@@ -148,7 +148,7 @@ function handlePost(postJSON) {
                 console.log("Server.js : The flag was modified, but its activation state was not affected");
         }
     } else {
-        console.log("Server.js : Post was not feature flag related");
+        console.log("Server.js : Post was not feature flag related : post.kind = ", post.kind);
     }
 }
 
@@ -336,7 +336,7 @@ function createWebhook(serverIP) {
         if (error) {
         console.log("Server.js : Webhook post error: ", error);
         } else {
-            if(response.statusCode != 200) {
+            if(response.statusCode != 200 || response.statusCode != 201) {
                     console.log("Server.js : statusMessage = ", response.statusMessage);
                     console.log("Server.js : there was an error with the POST createWebhook request");
             } else {

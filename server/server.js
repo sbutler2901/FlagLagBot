@@ -258,6 +258,7 @@ function getAllFlags() {
             console.log("Server.js : getAllflag() error: ", error);
         } else {
             if(response.statusCode != 200) {
+                console.log("StatusCode = ", response.statusCode);
                 console.log("Server.js : statusMessage = ", response.statusMessage);
                 console.log("Server.js : there was an error with the GET getAllFlags request");
             } else {

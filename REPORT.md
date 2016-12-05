@@ -2,7 +2,9 @@
 
 Please click on the link to access our demo on YouTube:
 
-
+<a href="https://youtu.be/I9A1-dG04aA" target="_blank">
+<img src="http://img.youtube.com/vi/58RUjCtPUo8/0.jpg" alt="Demo Video" width="300" height="180" border="10" />
+</a>
 
 ## Report [10%]
 ### Problem that is Solved

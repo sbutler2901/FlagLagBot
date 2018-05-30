@@ -1,3 +1,5 @@
 node_modules/
 parser/testModified.js
 parser/output.txt
+*.mov
+*.mp4
